@@ -6,20 +6,7 @@ import static com.wanghao.biz.util.Constant.DELIMETER;
  * @author wanghao
  */
 public class FlvTag extends Packet {
-    // Filter
-    private int filter;
-
-    // TagType
-    private int tagType;
-
-    // DataSize
-    private int dataSize;
-
-    // Timestamp + TimestampExtended
-    private int timestamp;
-
-    // StreamId
-    private int streamId;
+    private FlvTagHeader tagHeader;
 
     // AudioTagHeader, if TagType == 8
     private AudioTagHeader audioTagHeader;
@@ -40,34 +27,28 @@ public class FlvTag extends Packet {
     private ScriptTagData scriptTagData;
 
     /** audio */
-    public FlvTag(int tagType, int dataSize, int timestamp, int streamId,
-                  AudioTagHeader audioTagHeader, AudioTagBody audioTagBody,
+    public FlvTag(FlvTagHeader tagHeader, AudioTagHeader audioTagHeader, AudioTagBody audioTagBody,
                   int startIdx, int endIdx) {
         super(startIdx, endIdx);
-        setCommonFields(tagType, dataSize, timestamp, streamId);
-        this.filter = 0;
+        this.tagHeader = tagHeader;
         this.audioTagHeader = audioTagHeader;
         this.audioTagBody = audioTagBody;
     }
 
     /** video */
-    public FlvTag(int tagType, int dataSize, int timestamp, int streamId,
-                  VideoTagHeader videoTagHeader, VideoTagBody videoTagBody,
+    public FlvTag(FlvTagHeader tagHeader, VideoTagHeader videoTagHeader, VideoTagBody videoTagBody,
                   int startIdx, int endIdx) {
         super(startIdx, endIdx);
-        setCommonFields(tagType, dataSize, timestamp, streamId);
-        this.filter = 0;
+        this.tagHeader = tagHeader;
         this.videoTagHeader = videoTagHeader;
         this.videoTagBody = videoTagBody;
     }
 
     /** script */
-    public FlvTag(int tagType, int dataSize, int timestamp, int streamId,
-                  ScriptTagData scriptTagData,
+    public FlvTag(FlvTagHeader tagHeader, ScriptTagData scriptTagData,
                   int startIdx, int endIdx) {
         super(startIdx, endIdx);
-        setCommonFields(tagType, dataSize, timestamp, streamId);
-        this.filter = 0;
+        this.tagHeader = tagHeader;
         this.scriptTagData = scriptTagData;
     }
 
@@ -77,32 +58,28 @@ public class FlvTag extends Packet {
 
     /** encrypted script */
 
-
-    private void setCommonFields(int tagType, int dataSize, int timestamp, int streamId) {
-        this.tagType = tagType;
-        this.dataSize = dataSize;
-        this.timestamp = timestamp;
-        this.streamId = streamId;
-    }
-
     public boolean isEncrypted() {
-        return filter == 1;
+        return tagHeader.getFilter() == 1;
     }
 
     public int getTagType() {
-        return tagType;
+        return tagHeader.getTagType();
     }
 
     public int getDataSize() {
-        return dataSize;
+        return tagHeader.getDataSize();
     }
 
     public int getTimestamp() {
-        return timestamp;
+        return tagHeader.getTimestamp();
     }
 
     public int getStreamId() {
-        return streamId;
+        return tagHeader.getStreamId();
+    }
+
+    public FlvTagHeader getTagHeader() {
+        return tagHeader;
     }
 
     public AudioTagHeader getAudioTagHeader() {
@@ -144,9 +121,9 @@ public class FlvTag extends Packet {
         if (isEncrypted()) {
             sb.append("encrypted").append(DELIMETER);
         }
-        sb.append("Size:").append(dataSize).append(DELIMETER);
-        sb.append("Time:").append(timestamp).append(DELIMETER);
-        switch (tagType) {
+        sb.append("Size:").append(tagHeader.getDataSize()).append(DELIMETER);
+        sb.append("Time:").append(tagHeader.getTimestamp()).append(DELIMETER);
+        switch (tagHeader.getTagType()) {
             case 8:
                 sb.append(audioTagHeader.getBriefInfo()).append(DELIMETER).append(audioTagBody.getBriefInfo());
                 break;
@@ -170,8 +147,7 @@ public class FlvTag extends Packet {
     public Object[][] getDetailInfo() {
         Object[][] tagHeaderData = null;
         Object[][] tagBodyData = null;
-        switch (tagType) {
-            //todo: TreeTableView
+        switch (tagHeader.getTagType()) {
             case 8:
                 tagHeaderData = audioTagHeader.getDetailInfo();
                 tagBodyData = audioTagBody.getDetailInfo();
@@ -197,11 +173,11 @@ public class FlvTag extends Packet {
 
         String[][] data = new String[tagHeaderRows+tagBodyRows+6][2];
         data[0][0] = "TagHeader";data[0][1] = "";
-        data[1][0] = "  Filter";data[1][1] = String.valueOf(filter);
-        data[2][0] = "  TagType";data[2][1] = String.valueOf(tagType);
-        data[3][0] = "  DataSize";data[3][1] = String.valueOf(dataSize);
-        data[4][0] = "  Timestamp";data[4][1] = String.valueOf(timestamp);
-        data[5][0] = "  StreamId";data[5][1] = String.valueOf(streamId);
+        data[1][0] = "  Filter";data[1][1] = String.valueOf(tagHeader.getFilter());
+        data[2][0] = "  TagType";data[2][1] = String.valueOf(tagHeader.getTagType());
+        data[3][0] = "  DataSize";data[3][1] = String.valueOf(tagHeader.getDataSize());
+        data[4][0] = "  Timestamp";data[4][1] = String.valueOf(tagHeader.getTimestamp());
+        data[5][0] = "  StreamId";data[5][1] = String.valueOf(tagHeader.getStreamId());
         if (tagHeaderData != null) {
             for (int i = 6; i < 6+tagHeaderRows; i++) {
                 data[i][0] = (String) tagHeaderData[i-6][0];
@@ -216,6 +192,5 @@ public class FlvTag extends Packet {
         }
 
         return data;
-
     }
 }

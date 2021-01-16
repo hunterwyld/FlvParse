@@ -1,13 +1,14 @@
 package com.wanghao.ui;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
 /**
  * @author wanghao
  * @description 自定义表格
  */
-public class DataTable extends JTable {
+public class DataTable extends JTable implements ThemeChangeable {
 
     public DataTable(Object[] columnNames, Object[][] data) {
         super(data, columnNames);
@@ -22,6 +23,8 @@ public class DataTable extends JTable {
         this.getTableHeader().setForeground(Color.gray);              // 设置表头名称字体颜色
         this.getTableHeader().setResizingAllowed(true);               // 设置允许手动改变列宽
         this.getTableHeader().setReorderingAllowed(false);            // 设置不允许拖动重新排序各列
+        this.getTableHeader().setBackground(UIConstant.MAIN_BACK_COLOR);
+        this.getTableHeader().setBorder(new EtchedBorder());
 
         // 设置列宽
 //        for (int i = 0; i < preferredWidths.length; i++) {
@@ -36,7 +39,13 @@ public class DataTable extends JTable {
         this.setRowSelectionAllowed(true);
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //this.setCellSelectionEnabled(false);
-//        this.setAlignmentX();
-//        this.setAlignmentY();
+        this.setSelectionBackground(UIConstant.DEFAULT_THEME_COLOR);
+    }
+
+    @Override
+    public void changeTheme(ColorButton theme) {
+        if (theme != null) {
+            this.setSelectionBackground(theme.getColor());
+        }
     }
 }

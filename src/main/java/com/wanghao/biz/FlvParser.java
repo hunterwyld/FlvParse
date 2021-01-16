@@ -104,13 +104,18 @@ public class FlvParser {
                 logger.error("flv tag invalid: first byte");
                 return null;
         }
+        if (isEncrypted) {
+            throw new BusinessException("encrypted flv is not supported");
+        }
 
         int dataSize = byteBuf.readUnsignedMedium();
         int timestamp = byteBuf.readInt();
         int streamId = byteBuf.readUnsignedMedium();
+        int tagHeaderEndIdx = byteBuf.readerIndex() - 1;
+        FlvTagHeader tagHeader = new FlvTagHeader(0, tagType, dataSize, timestamp, streamId, startIdx, tagHeaderEndIdx);
+
         AudioTagHeader audioTagHeader = null;
         VideoTagHeader videoTagHeader = null;
-
         int size = 0;
         if (tagType == 8) {
             audioTagHeader = parseAudioTagHeader(byteBuf);
@@ -120,25 +125,22 @@ public class FlvParser {
             videoTagHeader = parseVideoTagHeader(byteBuf);
             size += videoTagHeader.getLength();
         }
-        if (isEncrypted) {
-            throw new BusinessException("encrypted flv is not supported");
-        }
 
         int bodySize = dataSize - size;
         if (tagType == 8) {
             AudioTagBody audioTagBody = parseAudioTagBody(byteBuf, bodySize);
             int endIdx = byteBuf.readerIndex() - 1;
-            return new FlvTag(tagType, dataSize, timestamp, streamId, audioTagHeader, audioTagBody, startIdx, endIdx);
+            return new FlvTag(tagHeader, audioTagHeader, audioTagBody, startIdx, endIdx);
         }
         if (tagType == 9) {
             VideoTagBody videoTagBody = parseVideoTagBody(byteBuf, bodySize);
             int endIdx = byteBuf.readerIndex() - 1;
-            return new FlvTag(tagType, dataSize, timestamp, streamId, videoTagHeader, videoTagBody, startIdx, endIdx);
+            return new FlvTag(tagHeader, videoTagHeader, videoTagBody, startIdx, endIdx);
         }
         // tagType = 18
         ScriptTagData scriptTagData = parseScriptTagData(byteBuf, bodySize);
         int endIdx = byteBuf.readerIndex() - 1;
-        return new FlvTag(tagType, dataSize, timestamp, streamId, scriptTagData, startIdx, endIdx);
+        return new FlvTag(tagHeader, scriptTagData, startIdx, endIdx);
     }
 
     private static ScriptTagData parseScriptTagData(ByteBuf byteBuf, int bodySize) {

@@ -3,7 +3,7 @@ package com.wanghao.ui;
 import com.wanghao.App;
 import com.wanghao.biz.FlvParser;
 import com.wanghao.biz.err.BusinessException;
-import com.wanghao.biz.flv.FlvTag;
+import com.wanghao.biz.flv.*;
 import com.wanghao.biz.util.Constant;
 
 import javax.swing.*;
@@ -34,6 +34,11 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
     private static DataTable tableLeft;
     private static DataTable tableRightUp;
     private static DataTable tableRightDown;
+
+    // 表头（列名）
+    private static final String[] tableLeftColumns = {"Type", "Info"};
+    private static final String[] tableRightUpColumns = {"Detail", "Value"};
+    private static final String[] tableRightDownColumns = {"No.", "Bytes", "Ascii"};
 
 
     public AnalyzePanel() {
@@ -118,13 +123,10 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
     }
 
     private void populateData2Left() {
-        // 表头（列名）
-        String[] columnNames = {"Type", "Info"};
-
         int numRow = 1 + flvBody.getFlvTagList().size();
-        Object[][] data = new Object[numRow][columnNames.length];
+        Object[][] data = new Object[numRow][tableLeftColumns.length];
         for (int i = 0; i < numRow; i++) {
-            for (int j = 0; j < columnNames.length; j++) {
+            for (int j = 0; j < tableLeftColumns.length; j++) {
                 if (i == 0) {
                     if (j == 0) {
                         data[i][j] = "Header";
@@ -142,7 +144,7 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
             }
         }
 
-        tableLeft = new DataTable(columnNames, data);
+        tableLeft = new DataTable(tableLeftColumns, data);
         panelCenterLeft.setViewportView(tableLeft);
 
         tableLeft.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -162,28 +164,84 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
     }
 
     private void populateFlvHeader2RightUp() {
-        String[] columnNames = {"Detail", "Value"};
         Object[][] data = flvHeader.getDetailInfo();
-        tableRightUp = new DataTable(columnNames, data);
+        tableRightUp = new DataTable(tableRightUpColumns, data);
         panelCenterRightUp.setViewportView(tableRightUp);
     }
-    private void populateFlvTag2RightUp(FlvTag flvTag) {
-        String[] columnNames = {"Detail", "Value"};
-        Object[][] data = flvTag.getDetailInfo();
-        tableRightUp = new DataTable(columnNames, data);
+    private void populateFlvTag2RightUp(final FlvTag flvTag) {
+        final Object[][] data = flvTag.getDetailInfo();
+        tableRightUp = new DataTable(tableRightUpColumns, data);
         panelCenterRightUp.setViewportView(tableRightUp);
+
+        tableRightUp.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int selectedRow = tableRightUp.getSelectedRow();
+                String row = String.valueOf(data[selectedRow][0]);
+                switch (row) {
+                    case "TagHeader":
+                        populateTagHeader2RightDown(flvTag.getTagHeader());
+                        break;
+                    case "AudioTagHeader":
+                        populateAudioTagHeader2RightDown(flvTag.getAudioTagHeader());
+                        break;
+                    case "AudioTagBody":
+                        populateAudioTagBody2RightDown(flvTag.getAudioTagBody());
+                        break;
+                    case "VideoTagHeader":
+                        populateVideoTagHeader2RightDown(flvTag.getVideoTagHeader());
+                        break;
+                    case "VideoTagBody":
+                        populateVideoTagBody2RightDown(flvTag.getVideoTagBody());
+                        break;
+                    case "ScriptTagData":
+                        populateScriptTagBody2RightDown(flvTag.getScriptTagData());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     private void populateFlvHeader2RightDown() {
-        String[] columnNames = {"No.", "Bytes", "Ascii"};
         Object[][] data = flvHeader.getPrintable(byteBuf);
-        tableRightDown = new DataTable(columnNames, data);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
         panelCenterRightDown.setViewportView(tableRightDown);
     }
     private void populateFlvTag2RightDown(FlvTag flvTag) {
-        String[] columnNames = {"No.", "Bytes", "Ascii"};
         Object[][] data = flvTag.getPrintable(byteBuf);
-        tableRightDown = new DataTable(columnNames, data);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateTagHeader2RightDown(FlvTagHeader tagHeader) {
+        Object[][] data = tagHeader.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateAudioTagHeader2RightDown(AudioTagHeader audioTagHeader) {
+        Object[][] data = audioTagHeader.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateAudioTagBody2RightDown(AudioTagBody audioTagBody) {
+        Object[][] data = audioTagBody.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateVideoTagHeader2RightDown(VideoTagHeader videoTagHeader) {
+        Object[][] data = videoTagHeader.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateVideoTagBody2RightDown(VideoTagBody videoTagBody) {
+        Object[][] data = videoTagBody.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
+        panelCenterRightDown.setViewportView(tableRightDown);
+    }
+    private void populateScriptTagBody2RightDown(ScriptTagData scriptTagData) {
+        Object[][] data = scriptTagData.getPrintable(byteBuf);
+        tableRightDown = new DataTable(tableRightDownColumns, data);
         panelCenterRightDown.setViewportView(tableRightDown);
     }
 
@@ -251,6 +309,9 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
         buttonSelect.setForeground(theme.getColor());
         labelSelect.setForeground(theme.getColor());
         buttonConfirm.setForeground(theme.getColor());
+        tableLeft.changeTheme(theme);
+        tableRightUp.changeTheme(theme);
+        tableRightDown.changeTheme(theme);
         this.updateUI();
     }
 }
