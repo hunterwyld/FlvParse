@@ -309,9 +309,15 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
         buttonSelect.setForeground(theme.getColor());
         labelSelect.setForeground(theme.getColor());
         buttonConfirm.setForeground(theme.getColor());
-        tableLeft.changeTheme(theme);
-        tableRightUp.changeTheme(theme);
-        tableRightDown.changeTheme(theme);
+        if (tableLeft != null) {
+            tableLeft.changeTheme(theme);
+        }
+        if (tableRightUp != null) {
+            tableRightUp.changeTheme(theme);
+        }
+        if (tableRightDown != null) {
+            tableRightDown.changeTheme(theme);
+        }
         this.updateUI();
     }
 }
