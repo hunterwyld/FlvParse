@@ -1,5 +1,7 @@
 package com.wanghao.ui;
 
+import com.wanghao.ui.theme.ThemeHelper;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicBorders;
@@ -21,7 +23,7 @@ public class TextButton extends JButton {
         this.setRolloverEnabled(true);
         this.setMargin(new Insets(0, 0, 0, 0));
 
-        Color color = UIConstant.DEFAULT_THEME_COLOR;
+        Color color = ThemeHelper.getCurTheme().getColorThemePack().getColor();
         Border border = new BasicBorders.ButtonBorder(color, color, color, color);
         this.setBorder(border);
 

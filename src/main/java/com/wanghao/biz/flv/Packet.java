@@ -56,7 +56,7 @@ public abstract class Packet {
         for (int row = 0; row < n-1; row++) {
             StringBuilder sb2 = new StringBuilder();
             StringBuilder sb3 = new StringBuilder();
-            for (int i = this.getStart()+16*row; i <= this.getStart()+16*(row+1); i++) {
+            for (int i = this.getStart()+16*row; i <= this.getStart()+16*(row+1)-1; i++) {
                 sb2.append(getHexByte(array[i])).append(" ");
                 sb3.append(getPrintableChar((char) array[i]));
             }

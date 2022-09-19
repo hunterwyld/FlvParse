@@ -1,4 +1,6 @@
-package com.wanghao.ui;
+package com.wanghao.ui.theme;
+
+import com.wanghao.ui.UIConstant;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -6,15 +8,15 @@ import java.awt.*;
 
 /**
  * @author wanghao
- * @description 纯色按钮
+ * @description 用来选择主题的按钮，按钮颜色与主题颜色相同
  */
-public class ColorButton extends JButton {
-    private String theme;
+public class ThemeButton extends JButton {
+    private ThemePack theme;
     private Color color;
 
-    public ColorButton(Color color, String theme) {
+    public ThemeButton(ThemePack theme) {
         this.theme = theme;
-        this.color = color;
+        this.color = theme.getColorThemePack().getColor();
 
         this.setUI(new BasicButtonUI());
 
@@ -31,8 +33,12 @@ public class ColorButton extends JButton {
         this.setMargin(new Insets(0, 0, 0, 0));
     }
 
-    public String getTheme() {
+    public ThemePack getTheme() {
         return theme;
+    }
+
+    public String getThemeName() {
+        return theme.getName();
     }
 
     public Color getColor() {

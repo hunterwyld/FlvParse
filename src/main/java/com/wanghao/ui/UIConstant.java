@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wanghao
@@ -42,56 +41,8 @@ public class UIConstant {
      * 主图标
      */
     public final static ImageIcon ICON_APP_MAIN = new ImageIcon(
-            App.class.getResource("/icon/main.png"));
-    // 工具栏图标
-    /**
-     * 分析 默认
-     */
-    public final static ImageIcon BLUE_ICON_ANALYZE = new ImageIcon(
-            App.class.getResource("/icon/blue_analyze.png"));
-    public final static ImageIcon GREEN_ICON_ANALYZE = new ImageIcon(
-            App.class.getResource("/icon/green_analyze.png"));
-    public final static ImageIcon YELLOW_ICON_ANALYZE = new ImageIcon(
-            App.class.getResource("/icon/yellow_analyze.png"));
-    public final static ImageIcon RED_ICON_ANALYZE = new ImageIcon(
-            App.class.getResource("/icon/red_analyze.png"));
-    public static ImageIcon ICON_ANALYZE = BLUE_ICON_ANALYZE;
-    /**
-     * 分析 激活
-     */
-    public final static ImageIcon BLUE_ICON_ANALYZE_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/blue_analyzeEnable.png"));
-    public final static ImageIcon GREEN_ICON_ANALYZE_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/green_analyzeEnable.png"));
-    public final static ImageIcon YELLOW_ICON_ANALYZE_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/yellow_analyzeEnable.png"));
-    public final static ImageIcon RED_ICON_ANALYZE_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/red_analyzeEnable.png"));
-    public static ImageIcon ICON_ANALYZE_ENABLE = BLUE_ICON_ANALYZE_ENABLE;
-    /**
-     * 设置 默认
-     */
-    public final static ImageIcon BLUE_ICON_SETTING = new ImageIcon(
-            App.class.getResource("/icon/blue_setting.png"));
-    public final static ImageIcon GREEN_ICON_SETTING = new ImageIcon(
-            App.class.getResource("/icon/green_setting.png"));
-    public final static ImageIcon YELLOW_ICON_SETTING = new ImageIcon(
-            App.class.getResource("/icon/yellow_setting.png"));
-    public final static ImageIcon RED_ICON_SETTING = new ImageIcon(
-            App.class.getResource("/icon/red_setting.png"));
-    public static ImageIcon ICON_SETTING = BLUE_ICON_SETTING;
-    /**
-     * 设置 激活
-     */
-    public final static ImageIcon BLUE_ICON_SETTING_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/blue_settingEnable.png"));
-    public final static ImageIcon GREEN_ICON_SETTING_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/green_settingEnable.png"));
-    public final static ImageIcon YELLOW_ICON_SETTING_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/yellow_settingEnable.png"));
-    public final static ImageIcon RED_ICON_SETTING_ENABLE = new ImageIcon(
-            App.class.getResource("/icon/red_settingEnable.png"));
-    public static ImageIcon ICON_SETTING_ENABLE = BLUE_ICON_SETTING_ENABLE;
+            Objects.requireNonNull(App.class.getResource("/icon/main.png")));
+
 
     // 样式布局相关
     /**
@@ -120,53 +71,4 @@ public class UIConstant {
     // border
     public final static Border LINE_BORDER = new LineBorder(Color.lightGray, 1, true);
 
-
-    // 主题
-    /**
-     * 主题色
-     */
-    public final static Color BLUE_THEME_COLOR = new Color(54,128,243);
-    public final static Color BLUE_THEME_COLOR_ENABLE = new Color(48,119,180);
-
-    public final static Color GREEN_THEME_COLOR = new Color(37,174,96);
-    public final static Color GREEN_THEME_COLOR_ENABLE = new Color(69,186,121);
-
-    public final static Color YELLOW_THEME_COLOR = new Color(238,132,78);
-    public final static Color YELLOW_THEME_COLOR_ENABLE = new Color(236,143,119);
-
-    public final static Color RED_THEME_COLOR = new Color(218,58,48);
-    public final static Color RED_THEME_COLOR_ENABLE = new Color(222,95,83);
-
-    public static Color DEFAULT_THEME_COLOR = BLUE_THEME_COLOR;
-    public static Color DEFAULT_THEME_COLOR_ENABLE = BLUE_THEME_COLOR_ENABLE;
-
-    public static final Map<String, Color> themeMap = new HashMap<>(4);
-    public static final Map<String, ImageIcon> analyzeIconMap = new HashMap<>(4);
-    public static final Map<String, ImageIcon> analyzeIconEnableMap = new HashMap<>(4);
-    public static final Map<String, ImageIcon> settingIconMap = new HashMap<>(4);
-    public static final Map<String, ImageIcon> settingIconEnableMap = new HashMap<>(4);
-    static {
-        themeMap.put("blue", BLUE_THEME_COLOR_ENABLE);
-        themeMap.put("green", GREEN_THEME_COLOR_ENABLE);
-        themeMap.put("yellow", YELLOW_THEME_COLOR_ENABLE);
-        themeMap.put("red", RED_THEME_COLOR_ENABLE);
-
-        analyzeIconMap.put("blue", BLUE_ICON_ANALYZE);
-        analyzeIconMap.put("green", GREEN_ICON_ANALYZE);
-        analyzeIconMap.put("yellow", YELLOW_ICON_ANALYZE);
-        analyzeIconMap.put("red", RED_ICON_ANALYZE);
-        analyzeIconEnableMap.put("blue", BLUE_ICON_ANALYZE_ENABLE);
-        analyzeIconEnableMap.put("green", GREEN_ICON_ANALYZE_ENABLE);
-        analyzeIconEnableMap.put("yellow", YELLOW_ICON_ANALYZE_ENABLE);
-        analyzeIconEnableMap.put("red", RED_ICON_ANALYZE_ENABLE);
-
-        settingIconMap.put("blue", BLUE_ICON_SETTING);
-        settingIconMap.put("green", GREEN_ICON_SETTING);
-        settingIconMap.put("yellow", YELLOW_ICON_SETTING);
-        settingIconMap.put("red", RED_ICON_SETTING);
-        settingIconEnableMap.put("blue", BLUE_ICON_SETTING_ENABLE);
-        settingIconEnableMap.put("green", GREEN_ICON_SETTING_ENABLE);
-        settingIconEnableMap.put("yellow", YELLOW_ICON_SETTING_ENABLE);
-        settingIconEnableMap.put("red", RED_ICON_SETTING_ENABLE);
-    }
 }

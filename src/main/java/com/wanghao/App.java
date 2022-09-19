@@ -1,6 +1,5 @@
 package com.wanghao;
 
-import com.wanghao.biz.util.Constant;
 import com.wanghao.ui.AnalyzePanel;
 import com.wanghao.ui.SettingPanel;
 import com.wanghao.ui.ToolBarPanel;

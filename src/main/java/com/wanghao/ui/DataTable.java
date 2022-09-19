@@ -1,5 +1,10 @@
 package com.wanghao.ui;
 
+import com.wanghao.ui.theme.ThemeButton;
+import com.wanghao.ui.theme.ThemeChangeable;
+import com.wanghao.ui.theme.ThemeHelper;
+import com.wanghao.ui.theme.ThemePack;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -39,13 +44,13 @@ public class DataTable extends JTable implements ThemeChangeable {
         this.setRowSelectionAllowed(true);
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //this.setCellSelectionEnabled(false);
-        this.setSelectionBackground(UIConstant.DEFAULT_THEME_COLOR);
+        this.setSelectionBackground(ThemeHelper.getCurTheme().getColorThemePack().getColor());
     }
 
     @Override
-    public void changeTheme(ColorButton theme) {
+    public void changeTheme(ThemePack theme) {
         if (theme != null) {
-            this.setSelectionBackground(theme.getColor());
+            this.setSelectionBackground(theme.getColorThemePack().getColor());
         }
     }
 }

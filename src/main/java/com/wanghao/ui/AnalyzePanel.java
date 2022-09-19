@@ -5,6 +5,9 @@ import com.wanghao.biz.FlvParser;
 import com.wanghao.biz.err.BusinessException;
 import com.wanghao.biz.flv.*;
 import com.wanghao.biz.util.Constant;
+import com.wanghao.ui.theme.ThemeChangeable;
+import com.wanghao.ui.theme.ThemeHelper;
+import com.wanghao.ui.theme.ThemePack;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -73,7 +76,7 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
 
         labelTitle = new JLabel("FlvParse");
         labelTitle.setFont(UIConstant.FONT_TITLE);
-        labelTitle.setForeground(UIConstant.DEFAULT_THEME_COLOR);
+        labelTitle.setForeground(ThemeHelper.getCurTheme().getColorThemePack().getColor());
 
         // Flow
         JPanel panelFlow = new JPanel();
@@ -301,14 +304,14 @@ public class AnalyzePanel extends JPanel implements ThemeChangeable {
     }
 
     @Override
-    public void changeTheme(ColorButton theme) {
+    public void changeTheme(ThemePack theme) {
         if (theme == null) {
             return;
         }
-        labelTitle.setForeground(theme.getColor());
-        buttonSelect.setForeground(theme.getColor());
-        labelSelect.setForeground(theme.getColor());
-        buttonConfirm.setForeground(theme.getColor());
+        labelTitle.setForeground(theme.getColorThemePack().getColor());
+        buttonSelect.setForeground(theme.getColorThemePack().getColor());
+        labelSelect.setForeground(theme.getColorThemePack().getColor());
+        buttonConfirm.setForeground(theme.getColorThemePack().getColor());
         if (tableLeft != null) {
             tableLeft.changeTheme(theme);
         }

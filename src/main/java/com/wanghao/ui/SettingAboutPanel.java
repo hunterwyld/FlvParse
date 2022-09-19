@@ -7,8 +7,8 @@ import java.awt.*;
  * @author wanghao
  * @description About面板
  */
-public class SettingPanelAbout extends JPanel {
-    public SettingPanelAbout() {
+public class SettingAboutPanel extends JPanel {
+    public SettingAboutPanel() {
         init();
         addComponent();
     }

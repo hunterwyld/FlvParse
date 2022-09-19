@@ -1,6 +1,9 @@
 package com.wanghao.ui;
 
 import com.wanghao.App;
+import com.wanghao.ui.theme.ThemeChangeable;
+import com.wanghao.ui.theme.ThemeHelper;
+import com.wanghao.ui.theme.ThemePack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +19,8 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
     private static JPanel panelTheme;
     private static JPanel panelAbout;
     private static JPanel settingPanelMain;
-    private static JPanel settingPanelTheme;
-    private static JPanel settingPanelAbout;
+    private static JPanel settingThemePanel;
+    private static JPanel settingAboutPanel;
 
     /**
      * 构造
@@ -54,7 +57,7 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
 
         labelTitle = new JLabel("Settings");
         labelTitle.setFont(UIConstant.FONT_TITLE);
-        labelTitle.setForeground(UIConstant.DEFAULT_THEME_COLOR);
+        labelTitle.setForeground(ThemeHelper.getCurTheme().getColorThemePack().getColor());
         panelUp.add(labelTitle);
 
         return panelUp;
@@ -77,12 +80,12 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
         panelList.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
         panelTheme = new JPanel();
-        panelTheme.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+        panelTheme.setBackground(ThemeHelper.getCurTheme().getColorThemePack().getColor());
         panelTheme.setLayout(new FlowLayout(FlowLayout.LEFT, 30, 13));
         Dimension preferredSizeListItem = new Dimension(245, 48);
         panelTheme.setPreferredSize(preferredSizeListItem);
         panelAbout = new JPanel();
-        panelAbout.setBackground(UIConstant.DEFAULT_THEME_COLOR_ENABLE);
+        panelAbout.setBackground(ThemeHelper.getCurTheme().getColorThemePack().getColorEnable());
         panelAbout.setLayout(new FlowLayout(FlowLayout.LEFT, 30, 13));
         panelAbout.setPreferredSize(preferredSizeListItem);
 
@@ -100,14 +103,14 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
         panelList.add(panelAbout);
 
 
-        settingPanelTheme = new SettingPanelTheme();
-        settingPanelAbout = new SettingPanelAbout();
+        settingThemePanel = new SettingThemePanel();
+        settingAboutPanel = new SettingAboutPanel();
         // 设置Panel
         settingPanelMain = new JPanel();
         settingPanelMain.setBackground(UIConstant.MAIN_BACK_COLOR);
         settingPanelMain.setLayout(new BorderLayout());
-        settingPanelMain.add(settingPanelTheme);
-        settingPanelMain.add(settingPanelAbout);
+        settingPanelMain.add(settingThemePanel);
+        settingPanelMain.add(settingAboutPanel);
 
         panelCenter.add(panelList, BorderLayout.WEST);
         panelCenter.add(settingPanelMain, BorderLayout.CENTER);
@@ -143,11 +146,12 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                panelTheme.setBackground(UIConstant.DEFAULT_THEME_COLOR_ENABLE);
-                panelAbout.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+                ThemePack curTheme = ThemeHelper.getCurTheme();
+                panelTheme.setBackground(curTheme.getColorThemePack().getColorEnable());
+                panelAbout.setBackground(curTheme.getColorThemePack().getColor());
 
                 settingPanelMain.removeAll();
-                settingPanelMain.add(settingPanelTheme);
+                settingPanelMain.add(settingThemePanel);
                 App.settingPanel.updateUI();
             }
         });
@@ -176,24 +180,25 @@ public class SettingPanel extends JPanel implements ThemeChangeable {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                panelAbout.setBackground(UIConstant.DEFAULT_THEME_COLOR_ENABLE);
-                panelTheme.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+                ThemePack curTheme = ThemeHelper.getCurTheme();
+                panelAbout.setBackground(curTheme.getColorThemePack().getColorEnable());
+                panelTheme.setBackground(curTheme.getColorThemePack().getColor());
 
                 settingPanelMain.removeAll();
-                settingPanelMain.add(settingPanelAbout);
+                settingPanelMain.add(settingAboutPanel);
                 App.settingPanel.updateUI();
             }
         });
     }
 
     @Override
-    public void changeTheme(ColorButton theme) {
+    public void changeTheme(ThemePack theme) {
         if (theme == null) {
             return;
         }
-        labelTitle.setForeground(theme.getColor());
-        panelTheme.setBackground(UIConstant.themeMap.get(theme.getTheme()));
-        panelAbout.setBackground(theme.getColor());
+        labelTitle.setForeground(theme.getColorThemePack().getColor());
+        panelTheme.setBackground(theme.getColorThemePack().getColorEnable());
+        panelAbout.setBackground(theme.getColorThemePack().getColor());
         this.updateUI();
     }
 }

@@ -1,6 +1,9 @@
 package com.wanghao.ui;
 
 import com.wanghao.App;
+import com.wanghao.ui.theme.ThemeChangeable;
+import com.wanghao.ui.theme.ThemeHelper;
+import com.wanghao.ui.theme.ThemePack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +35,7 @@ public class ToolBarPanel extends JPanel implements ThemeChangeable {
         this.setPreferredSize(preferredSize);
         this.setMaximumSize(preferredSize);
         this.setMinimumSize(preferredSize);
-        this.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+        this.setBackground(ThemeHelper.getCurTheme().getColorThemePack().getColor());
         this.setLayout(new GridLayout(2, 1));
     }
 
@@ -40,18 +43,23 @@ public class ToolBarPanel extends JPanel implements ThemeChangeable {
      * 添加工具按钮
      */
     private void addButton() {
+        ThemePack curTheme = ThemeHelper.getCurTheme();
 
         panelUp = new JPanel();
-        panelUp.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+        panelUp.setBackground(curTheme.getColorThemePack().getColor());
         panelUp.setLayout(new FlowLayout(FlowLayout.CENTER, -2, -4));
         panelDown = new JPanel();
-        panelDown.setBackground(UIConstant.DEFAULT_THEME_COLOR);
+        panelDown.setBackground(curTheme.getColorThemePack().getColor());
         panelDown.setLayout(new BorderLayout(0, 0));
 
-        buttonAnalyze = new IconButton(UIConstant.ICON_ANALYZE, UIConstant.ICON_ANALYZE_ENABLE,
-                UIConstant.ICON_ANALYZE, "FlvParse");
-        buttonSetting = new IconButton(UIConstant.ICON_SETTING, UIConstant.ICON_SETTING_ENABLE,
-                UIConstant.ICON_SETTING, "Settings");
+        buttonAnalyze = new IconButton(curTheme.getAnalyzeThemePack().getIcon(),
+                curTheme.getAnalyzeThemePack().getIconEnable(),
+                curTheme.getAnalyzeThemePack().getIcon(),
+                "FlvParse");
+        buttonSetting = new IconButton(curTheme.getSettingThemePack().getIcon(),
+                curTheme.getSettingThemePack().getIconEnable(),
+                curTheme.getSettingThemePack().getIcon(),
+                "Settings");
 
         panelUp.add(buttonAnalyze);
 
@@ -68,8 +76,9 @@ public class ToolBarPanel extends JPanel implements ThemeChangeable {
         buttonAnalyze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buttonAnalyze.setIcon(UIConstant.ICON_ANALYZE_ENABLE);
-                buttonSetting.setIcon(UIConstant.ICON_SETTING);
+                ThemePack curTheme = ThemeHelper.getCurTheme();
+                buttonAnalyze.setIcon(curTheme.getAnalyzeThemePack().getIconEnable());
+                buttonSetting.setIcon(curTheme.getSettingThemePack().getIcon());
 
                 App.mainPanelCenter.removeAll();
                 App.mainPanelCenter.add(App.analyzePanel, BorderLayout.CENTER);
@@ -80,8 +89,9 @@ public class ToolBarPanel extends JPanel implements ThemeChangeable {
         buttonSetting.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buttonAnalyze.setIcon(UIConstant.ICON_ANALYZE);
-                buttonSetting.setIcon(UIConstant.ICON_SETTING_ENABLE);
+                ThemePack curTheme = ThemeHelper.getCurTheme();
+                buttonAnalyze.setIcon(curTheme.getAnalyzeThemePack().getIcon());
+                buttonSetting.setIcon(curTheme.getSettingThemePack().getIconEnable());
 
                 App.mainPanelCenter.removeAll();
                 App.mainPanelCenter.add(App.settingPanel, BorderLayout.CENTER);
@@ -91,17 +101,19 @@ public class ToolBarPanel extends JPanel implements ThemeChangeable {
     }
 
     @Override
-    public void changeTheme(ColorButton theme) {
+    public void changeTheme(ThemePack theme) {
         if (theme == null) {
             return;
         }
-        this.setBackground(theme.getColor());
-        panelUp.setBackground(theme.getColor());
-        panelDown.setBackground(theme.getColor());
-        buttonAnalyze.changeIcons(UIConstant.ICON_ANALYZE, UIConstant.ICON_ANALYZE_ENABLE,
-                UIConstant.ICON_ANALYZE);
-        buttonSetting.changeIcons(UIConstant.ICON_SETTING, UIConstant.ICON_SETTING_ENABLE,
-                UIConstant.ICON_SETTING);
+        this.setBackground(theme.getColorThemePack().getColor());
+        panelUp.setBackground(theme.getColorThemePack().getColor());
+        panelDown.setBackground(theme.getColorThemePack().getColor());
+        buttonAnalyze.changeIcons(theme.getAnalyzeThemePack().getIcon(),
+                theme.getAnalyzeThemePack().getIconEnable(),
+                theme.getAnalyzeThemePack().getIcon());
+        buttonSetting.changeIcons(theme.getSettingThemePack().getIcon(),
+                theme.getSettingThemePack().getIconEnable(),
+                theme.getSettingThemePack().getIcon());
         this.updateUI();
     }
 }
